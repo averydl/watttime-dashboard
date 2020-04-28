@@ -1,0 +1,6 @@
+{"data": [
+    {"id": "a1", "country": "China", "power": 28530, "date": "1/22/2020" },
+    {"id": "a2", "country": "Australia", "power": 29967, "date": "1/20/2020" },
+    {"id": "a3", "country": "Taiwan", "power": 4512, "date": "1/21/2020" },
+    {"id": "a4", "country": "BC", "power": 56025, "date": "1/19/2020" }
+  ]}
