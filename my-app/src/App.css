@@ -1,3 +1,17 @@
 .App {
   text-align: center;
 }
+
+.DataMapDiv {
+  position: relative;
+  width: 500px;
+  height: 300px;
+}
+
+.MapDiv {
+  width: 80%;
+  margin: 16px auto;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 3px #ccc;
+  padding: 16px;
+}
