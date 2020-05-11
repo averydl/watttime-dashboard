@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ChartLines from '../Components/Charts/ChartLines';
 
 function App() {
   //-----------------------------------------------
@@ -16,6 +16,7 @@ function App() {
     <div className="App">
       <div>Placeholder for MENU</div>
       <div>Placeholder for CHART 1</div>
+      <ChartLines></ChartLines>
       <div>Placeholder for CHART 2</div>
     </div>
   );

@@ -1,0 +1,70 @@
+{
+    "powerData": [
+        {
+            "dateTime": "2020-05-01 11:00:00-05:00",
+            "load": 2000,
+            "coal": 100,
+            "natural gas": 600,
+            "petroleum": 100,
+            "nuclear": 100,
+            "solar": 100,
+            "hydro": 100,
+            "wind": 100
+        },
+        {
+            "dateTime": "2020-05-02 11:00:00-05:00",
+            "load": 2100,
+            "coal": 200,
+            "natural gas": 500,
+            "petroleum": 100,
+            "nuclear": 105,
+            "solar": 100,
+            "hydro": 100,
+            "wind": 100
+        },
+        {
+            "dateTime": "2020-05-03 11:00:00-05:00",
+            "load": 2200,
+            "coal": 300,
+            "natural gas": 400,
+            "petroleum": 100,
+            "nuclear": 110,
+            "solar": 100,
+            "hydro": 100,
+            "wind": 100
+        },
+        {
+            "dateTime": "2020-05-04 11:00:00-05:00",
+            "load": 2300,
+            "coal": 400,
+            "natural gas": 300,
+            "petroleum": 100,
+            "nuclear": 115,
+            "solar": 100,
+            "hydro": 100,
+            "wind": 100
+        },
+        {
+            "dateTime": "2020-05-05 11:00:00-05:00",
+            "load": 2400,
+            "coal": 500,
+            "natural gas": 200,
+            "petroleum": 100,
+            "nuclear": 120,
+            "solar": 100,
+            "hydro": 100,
+            "wind": 100
+        },
+        {
+            "dateTime": "2020-05-06 11:00:00-05:00",
+            "load": 2150,
+            "coal": 600,
+            "natural gas": 100,
+            "petroleum": 100,
+            "nuclear": 125,
+            "solar": 100,
+            "hydro": 100,
+            "wind": 100
+        }
+    ]
+}
