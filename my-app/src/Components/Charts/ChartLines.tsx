@@ -12,7 +12,7 @@ class ChartLines extends Component {
         console.log(dummyData);
         return(
             <div>
-                {/* <LineChart width={600} height={300} data={this.data}
+                <LineChart width={600} height={300} data={this.data}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <XAxis dataKey="dateTime"/>
                     <YAxis/>
@@ -22,7 +22,7 @@ class ChartLines extends Component {
                     <Line type="monotone" dataKey="load" stroke="#8884d8" />
                     <Line type="monotone" dataKey="hydro" stroke="#5ad178" />
                     <Line type="monotone" dataKey="coal" stroke="#fa0a0a" />
-                </LineChart> */}
+                </LineChart>
             </div>
 
         );
