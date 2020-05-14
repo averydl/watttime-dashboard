@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import ChartLines from '../Components/Charts/ChartLines';
+import ZoomGraph from '../Components/Charts/ZoomGraph';
+
 
 function App() {
   //-----------------------------------------------
@@ -18,6 +20,7 @@ function App() {
       <div>Placeholder for CHART 1</div>
       <ChartLines></ChartLines>
       <div>Placeholder for CHART 2</div>
+      <ZoomGraph></ZoomGraph>
     </div>
   );
 }
