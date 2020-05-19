@@ -160,13 +160,19 @@ def get_derived_data(data):
 
     return result
 
+
+def get_data(ba, start, end):
+    raw_data = get_raw_data(ba, start, end)
+    result = get_derived_data(raw_data)
+    return result
+
 # TODO: Add unittest module & improve testing/cover more test cases
-start = parse('2020-05-01 00:00:00+00:00')
-end = parse('2020-05-1 23:00:00+00:00')
+# start = parse('2020-05-01 00:00:00+00:00')
+# end = parse('2020-05-1 23:00:00+00:00')
 
-data = get_raw_data('CISO', start, end)
-table_data = get_derived_data(data)
+# data = get_raw_data('CISO', start, end)
+# table_data = get_derived_data(data)
 
-print(data)
-print(table_data)
-print(table_data.to_json())
+# print(data)
+# print(table_data)
+# print(table_data.to_json())
