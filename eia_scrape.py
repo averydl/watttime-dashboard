@@ -38,7 +38,9 @@ CATEGORY_IDS = {
 CATEGORY_URL = 'http://api.eia.gov/category/?api_key={}&category_id={}'
 SERIES_URL = 'http://api.eia.gov/series/?api_key={}&series_id={}'
 
-API_KEY = environ['API_KEY']
+# TODO: revert change below to hide api key again
+# API_KEY = environ['API_KEY']
+API_KEY = '49ef27c46c0ed988547e991c643cafec'
 CUR_DIR = path.abspath(__file__)
 TEMPFILE = path.join(CUR_DIR, 'temp.csv')
 
