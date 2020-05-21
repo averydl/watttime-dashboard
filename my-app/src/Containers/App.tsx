@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import ChartLines from '../Components/Charts/ChartLines';
+import FilterWindow from '../Components/SideBar2/FilterWindow';
 
 function App() {
   //-----------------------------------------------
@@ -14,10 +15,13 @@ function App() {
   //-----------------------------------------------
   return (
     <div className="App">
+      
       <div>Placeholder for MENU</div>
       <div>Placeholder for CHART 1</div>
       <ChartLines></ChartLines>
       <div>Placeholder for CHART 2</div>
+      <FilterWindow></FilterWindow>
+
     </div>
   );
 }

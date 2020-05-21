@@ -10,9 +10,9 @@
     "@types/d3-time": "^1.0.10",
     "@types/d3-time-format": "^2.1.1",
     "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.38",
-    "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.7",
+    "@types/node": "^12.12.39",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
     "@types/recharts": "^1.8.10",
     "d3": "^5.16.0",
     "date-fns": "^2.13.0",
@@ -20,7 +20,7 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "recharts": "^1.8.5",
-    "typescript": "^3.7.5"
+    "typescript": "^3.9.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,5 +42,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@angular/core": "^9.1.7",
+    "@angular/platform-browser": "^9.1.7",
+    "@angular/platform-browser-dynamic": "^9.1.7",
+    "@syncfusion/ej2-angular-navigations": "^18.1.52"
   }
 }
