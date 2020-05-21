@@ -15,13 +15,20 @@ function App() {
   //-----------------------------------------------
   return (
     <div className="App">
-      
-      <div>Placeholder for MENU</div>
-      <div>Placeholder for CHART 1</div>
-      <ChartLines></ChartLines>
-      <div>Placeholder for CHART 2</div>
-      <FilterWindow></FilterWindow>
-
+      <div className='flex-row'>
+        <div className='menu-column'>
+          <FilterWindow></FilterWindow>
+        </div>
+        <div className='chart-column'>
+          <div>
+            <ChartLines></ChartLines>
+          </div>
+          <div>
+            <div>Placeholder for CHART 2</div>
+            <div><ChartLines></ChartLines></div>
+          </div>
+        </div>
+      </div>      
     </div>
   );
 }

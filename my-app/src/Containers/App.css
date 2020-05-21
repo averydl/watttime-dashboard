@@ -43,13 +43,13 @@
   font-family: 'Roboto', sans-serif;
   border-radius: 15px;
   border: 2px solid #708090;
-  padding: 20px;
-  width: 20%;
-  height: 50%;
-  margin-top: 10%;
-  margin-left: 50px;
-  margin-bottom: 10%;
-  position: fixed;
+  padding: 5px;
+  width: 90%;
+  /* height: 50%; */
+  margin-top: 5px;
+  margin-left: 5px;
+  /* margin-bottom: 10%; */
+  /* position: fixed; */
   top: 10px;
   left: 10px;
   z-index: 99;
@@ -57,7 +57,6 @@
   /* cursor: url(components/custom_cursor2.png), auto; */
   resize: both;
   overflow: auto;
-
 }
 
 .block {
@@ -75,4 +74,18 @@
 
 input[type='checkbox'] {
   margin-right: 5px;
+}
+
+.flex-row{
+  display: flex;
+}
+
+.chart-column{
+  flex: 75%;
+  padding: 10px;
+}
+
+.menu-column{
+  flex: 25%;
+  padding: 10px;
 }
