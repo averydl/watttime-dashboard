@@ -8,25 +8,28 @@ import * as d3 from 'd3';
 import {pivotJsonTableData, timeStampStringToDate} from '../../DummyData/dataFormatter';
 import axios from '../../Containers/HttpRequestController/axiosEmissionsRequester';
 
+interface IState {
+    axiosData?: any;
+  }
 
 class ChartLines extends Component {
 
     state = {
-        axiosData: null,
+        axiosData: undefined,
+        dataLoaded: false
     }
 
-    data: any = dummyData.powerData;
-
-    fakeScraperData: any = scraperData;
-
-    formattedScrapeData: object[] = pivotJsonTableData(this.fakeScraperData);
+    scraperData: any;
 
     componentDidMount(){
         axios.get('/PJM?start=2020-04-01-01&end=2020-04-01-21')
             .then(response => {
-                this.setState({axiosData: response.data});
-                console.log(response);
-                console.log(response.data);
+                this.setState(
+                    {
+                        axiosData: pivotJsonTableData(response.data),
+                        dataLoaded: true
+                    });
+                this.scraperData = response.data;
             })
             .catch(error => {
                 console.log('ERROR:\n' + error);
@@ -37,7 +40,7 @@ class ChartLines extends Component {
 
         return(
             <div>
-                <LineChart width={600} height={300} data={this.formattedScrapeData}
+                <LineChart width={600} height={300} data={this.state.axiosData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     {/* <XAxis dataKey="dateTime" tickFormatter={d3.timeParse('%Y-%m-%d %H:%M:%S_Z')}/> */}
                     {/* <XAxis dataKey="date" tickFormatter={d3.timeFormat('%Y-%m-%d')}/> */}
@@ -51,7 +54,6 @@ class ChartLines extends Component {
                     <Line type="monotone" dataKey="fossil" stroke="#fa0a0a" />
                 </LineChart>
             </div>
-
         );
     }
 
