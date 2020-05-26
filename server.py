@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import eia_scrape
 import pytz
 from dateutil.parser import parse
@@ -15,7 +15,9 @@ def emissions(ba):
     else:
         start, end = parse(start).astimezone(timezone), parse(end).astimezone(timezone)
         data = eia_scrape.get_data(ba, start, end)
-        return data.to_json()
+        resp = Response(data.to_json())
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
 
 if __name__ == '__main__':

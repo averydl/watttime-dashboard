@@ -25,7 +25,6 @@ function App() {
           </div>
           <div>
             <div>Placeholder for CHART 2</div>
-            <div><ChartLines></ChartLines></div>
           </div>
         </div>
       </div>      

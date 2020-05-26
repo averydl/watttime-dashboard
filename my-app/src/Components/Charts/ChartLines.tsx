@@ -6,15 +6,32 @@ import {
   } from 'recharts';
 import * as d3 from 'd3';
 import {pivotJsonTableData, timeStampStringToDate} from '../../DummyData/dataFormatter';
+import axios from '../../Containers/HttpRequestController/axiosEmissionsRequester';
 
 
 class ChartLines extends Component {
+
+    state = {
+        axiosData: null,
+    }
 
     data: any = dummyData.powerData;
 
     fakeScraperData: any = scraperData;
 
     formattedScrapeData: object[] = pivotJsonTableData(this.fakeScraperData);
+
+    componentDidMount(){
+        axios.get('/PJM?start=2020-04-01-01&end=2020-04-01-21')
+            .then(response => {
+                this.setState({axiosData: response.data});
+                console.log(response);
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log('ERROR:\n' + error);
+            });
+    }
 
     render(){
 
