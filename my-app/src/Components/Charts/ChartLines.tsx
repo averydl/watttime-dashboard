@@ -22,7 +22,7 @@ class ChartLines extends Component {
     scraperData: any;
 
     componentDidMount(){
-        axios.get('/PJM?start=2020-04-01-01&end=2020-04-01-21')
+        axios.get('/PJM?start=2020-04-01-01&end=2020-04-02-23')
             .then(response => {
                 this.setState(
                     {
