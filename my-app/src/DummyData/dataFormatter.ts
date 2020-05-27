@@ -35,11 +35,21 @@ function nestedMapToJson(mapIn: Map<string, Map<string, any>>): any {
     tempJson[key] = entry;
     jsonArray.push(entry);
   });
-  return jsonArray.sort(compareDate);
+  return insertCleanDate(jsonArray.sort(compareDate));
 }
 
 function compareDate(a: any, b: any) {
   if (a.dateTime > b.dateTime) return 1;
   if (b.dateTime > a.dateTime) return -1;
   return 0;
+}
+
+function insertCleanDate(dataIn: any[]): any {
+  dataIn.forEach((d) => {
+    const dateObj = new Date(d.dateTime);
+    d['cleanDate'] = dateObj.toDateString() + ", " 
+      + dateObj.getHours().toString().padStart(2, '0') + ":" 
+      + dateObj.getMinutes().toString().padEnd(2,'0');
+  });
+  return dataIn;
 }

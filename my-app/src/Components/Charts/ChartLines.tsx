@@ -42,9 +42,7 @@ class ChartLines extends Component {
             <div>
                 <LineChart width={600} height={300} data={this.state.axiosData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                    {/* <XAxis dataKey="dateTime" tickFormatter={d3.timeParse('%Y-%m-%d %H:%M:%S_Z')}/> */}
-                    {/* <XAxis dataKey="date" tickFormatter={d3.timeFormat('%Y-%m-%d')}/> */}
-                    <XAxis dataKey="dateTime"/>
+                    <XAxis dataKey="cleanDate"/>
                     <YAxis/>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <Tooltip/>
