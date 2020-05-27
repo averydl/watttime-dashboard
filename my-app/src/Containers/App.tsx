@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
+import Navbar from '../Components/Navbar'
 import ChartLines from '../Components/Charts/ChartLines';
-import ZoomGraph from '../Components/Charts/ZoomGraph';
+import ChartBar from '../Components/Charts/ChartBar';
 
 
 function App() {
@@ -14,13 +15,15 @@ function App() {
   testNotConstant = 1;
   testNotConstant = "Now I'm a string again";
   //-----------------------------------------------
+  
   return (
-    <div className="App">
+    <div className="App">\
+    <Navbar></Navbar>
       <div>Placeholder for MENU</div>
       <div>Placeholder for CHART 1</div>
       <ChartLines></ChartLines>
       <div>Placeholder for CHART 2</div>
-      <ZoomGraph></ZoomGraph>
+      <ChartBar></ChartBar>
     </div>
   );
 }

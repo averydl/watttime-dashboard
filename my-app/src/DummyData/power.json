@@ -2,6 +2,9 @@
     "powerData": [
         {
             "dateTime": "2020-05-01 11:00:00-05:00",
+            "%change in fossil generation": 97,
+            "%change in carbon free generation": 14,
+            "%change in variable renewable generation": -11,
             "load": 2000,
             "coal": 100,
             "natural gas": 600,
