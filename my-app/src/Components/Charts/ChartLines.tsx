@@ -8,6 +8,7 @@ import * as d3 from 'd3';
 import {pivotJsonTableData, timeStampStringToDate, getDateString, subtractDays} from '../../DummyData/dataFormatter';
 import axios, {requestEmissions} from '../../Containers/HttpRequestController/axiosEmissionsRequester';
 import {connect} from 'react-redux';
+import CustomTooltip from './CustomToolTip';
 interface IProps {
     props?: any;
     chartRedux?: any;
@@ -103,7 +104,7 @@ class ChartLines extends Component<IProps, IState> {
                     <XAxis dataKey="cleanDate"/>
                     <YAxis/>
                     <CartesianGrid strokeDasharray="3 3"/>
-                    <Tooltip/>
+                    <Tooltip content={<CustomTooltip fullData={this.state.chartData}/>}/>
                     <Legend />
                     <Line type="monotone" dataKey="load" stroke="#8884d8" />
                     <Line type="monotone" dataKey="carbon_free" stroke="#5ad178" />

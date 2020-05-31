@@ -56,7 +56,7 @@ function insertCleanDate(dataIn: any[]): any {
 
 export function getDateString(dayIn: Date){
   const todayString: string = dayIn.getFullYear().toString() 
-    + "-" + dayIn.getMonth().toString().padStart(2,'0') 
+    + "-" + (dayIn.getMonth() + 1).toString().padStart(2,'0') 
     + "-" + dayIn.getDate().toString().padStart(2,'0');
     return todayString;
 }
