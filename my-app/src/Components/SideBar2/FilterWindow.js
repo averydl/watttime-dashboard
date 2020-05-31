@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux';
+import { chooseBA, chooseDays } from '../../actions/filterMenu';
 
 // import React, { Component } from 'react';
 // import Calendar from 'react-calendar';
@@ -32,8 +34,10 @@ class FilterWindow extends React.Component {
 
   // Apply filters
   applyFilters = (e) => {
-    e.preventDefault()
-    console.log(this.state)
+    e.preventDefault();
+    console.log(this.state);
+    this.props.chooseBA(this.state.selectedBalancingAuthority);
+    this.props.chooseDays(this.state.selectedDateRange);
   }
 
   render() {
@@ -159,4 +163,13 @@ class FilterWindow extends React.Component {
   }
 }
 
-export default FilterWindow
+function mapStateToProps(reduxState){
+  return {
+    filterMenuData: reduxState
+  };
+}
+
+
+
+// export default FilterWindow
+export default connect(mapStateToProps, {chooseBA, chooseDays})(FilterWindow)

@@ -1,16 +1,16 @@
 export const BALANCE_AUTH = "BALANCE_AUTH";
 export const DAYS = "DAYS";
 
-export function chooseBA(id: any) {
+export function chooseBA(balanceAuthority: any) {
   return {
     type: BALANCE_AUTH,
-    id
+    balanceAuthority
   }
 }
 
-export function chooseDays(id: any) {
+export function chooseDays(days: any) {
   return {
     type: DAYS,
-    id
+    days
   }
 }

@@ -62,6 +62,7 @@ export function getDateString(dayIn: Date){
 }
 
 export function subtractDays(today: Date, gap: number){
-  today.setDate(today.getDate() - gap);
-  return today;
+  const newDate: Date = new Date(today.getTime());
+  newDate.setDate(today.getDate() - gap);
+  return newDate;
 }

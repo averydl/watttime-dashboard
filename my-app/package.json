@@ -49,6 +49,7 @@
     "@angular/core": "^9.1.9",
     "@angular/platform-browser": "^9.1.9",
     "@angular/platform-browser-dynamic": "^9.1.9",
-    "@syncfusion/ej2-angular-navigations": "^18.1.54"
+    "@syncfusion/ej2-angular-navigations": "^18.1.54",
+    "redux-devtools-extension": "^2.13.8"
   }
 }
