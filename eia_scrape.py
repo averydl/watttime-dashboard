@@ -137,7 +137,7 @@ def get_raw_data(ba, start, end):
     data = make_dataframe(load, fuel)
     data = data.reset_index()
     date_range = data['ts'].between(start, end, inclusive=True)
-    data = data[date_range]
+    data = data[date_range].sort_values(by='ts')
     data.set_index('ts', inplace=True)
     return data
 
@@ -154,9 +154,9 @@ def get_derived_data(data):
     result['carbon_free'] = data[carbon_free].sum(axis=1)
 
     # chart 2 information
-    result['change_fossil'] = result['fossil'].pct_change()
-    result['change_carbon_free'] = result['carbon_free'].pct_change()
-    result['change_renewables'] = data[renewables].sum(axis=1).pct_change()
+    result['change_fossil'] = result['fossil'].pct_change().round(4)*100
+    result['change_carbon_free'] = result['carbon_free'].pct_change().round(4)*100
+    result['change_renewables'] = data[renewables].sum(axis=1).pct_change().round(4)*100
 
     return result
 
