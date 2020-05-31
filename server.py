@@ -1,6 +1,7 @@
 from flask import Flask, request
 import eia_scrape
 import pytz
+from datetime import datetime, timedelta
 from dateutil.parser import parse
 
 app = Flask(__name__)
@@ -9,11 +10,20 @@ timezone = pytz.utc
 
 @app.route('/emissions/<ba>', methods=['GET'])
 def emissions(ba):
-    start, end = request.args.get('start'), request.args.get('end')
-    if not start or not end:
-        return 'Must supply parameter(s) start/end', 400
+    days = request.args.get('days')
+    if not days:
+        return 'Must supply parameter "days"', 400
     else:
-        start, end = parse(start).astimezone(timezone), parse(end).astimezone(timezone)
+        current_date = datetime.now()
+        year, month, day = current_date.year, current_date.month, current_date.day
+
+        start = current_date - timedelta(days=(int(days)))
+        end = current_date
+
+        print(start)
+        print(end)
+
+        start, end = start.astimezone(timezone), end.astimezone(timezone)
         data = eia_scrape.get_data(ba, start, end)
         return data.to_json()
 
