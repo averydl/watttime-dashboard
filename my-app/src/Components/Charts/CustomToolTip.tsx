@@ -15,7 +15,7 @@ const CustomToolTip = (props: any) => {
       return o.cleanDate === label;
     });
 
-    if(dataPoint.change_fossil){
+    if(dataPoint.change_fossil && dataPoint.change_carbon_free && dataPoint.change_renewables){
       return (
         <div className="custom-tooltip">
           <p className="label">{`Time: ${label}`}</p>

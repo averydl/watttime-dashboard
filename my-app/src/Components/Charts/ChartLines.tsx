@@ -99,6 +99,7 @@ class ChartLines extends Component<IProps, IState> {
         console.log("render");
         return(
             <div>
+                <h1>{this.state.selectedBA + " - past " + this.state.days + " days"}</h1>
                 <LineChart width={600} height={300} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <XAxis dataKey="cleanDate"/>
