@@ -46,10 +46,8 @@ class ChartLines extends Component<IProps, IState> {
         console.log(this.state);
         console.log(this.props.chartRedux);
         axios.get('/' + this.props.chartRedux.BA 
-            + '?start=' 
-            + this.state.startDate 
-            + '&end=' 
-            + this.state.today )
+            + '?days=' 
+            + this.state.days)
             .then(response => {
                 this.setState({
                     ...this.state,
@@ -77,10 +75,8 @@ class ChartLines extends Component<IProps, IState> {
         if(this.state.days != this.props.chartRedux.DayRange || this.state.selectedBA != this.props.chartRedux.BA){
             const startDate = getDateString(subtractDays(this.todayDate, parseInt(this.props.chartRedux.DayRange)));
             axios.get('/' + this.props.chartRedux.BA 
-            + '?start=' 
-            + startDate
-            + '&end=' 
-            + this.state.today )
+            + '?days=' 
+            + this.props.chartRedux.DayRange )
             .then(response => {
                 this.setState({
                     ...this.state,

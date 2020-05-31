@@ -19,9 +19,9 @@ const CustomToolTip = (props: any) => {
       return (
         <div className="custom-tooltip">
           <p className="label">{`Time: ${label}`}</p>
-          <p className="label">{`Fossil Fuel Change: ${dataPoint.change_fossil.toFixed(4)}`}</p>
-          <p className="label">{`Carbon Free Change: ${dataPoint.change_carbon_free.toFixed(4)}`}</p>
-          <p className="label">{`Renewables Change: ${dataPoint.change_renewables.toFixed(4)}`}</p>
+          <p className="label">{`Fossil Fuel Change: ${dataPoint.change_fossil}%`}</p>
+          <p className="label">{`Carbon Free Change: ${dataPoint.change_carbon_free}%`}</p>
+          <p className="label">{`Renewables Change: ${dataPoint.change_renewables}%`}</p>
         </div>
       );
     } else {
