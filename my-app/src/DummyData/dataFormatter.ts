@@ -53,3 +53,15 @@ function insertCleanDate(dataIn: any[]): any {
   });
   return dataIn;
 }
+
+export function getDateString(dayIn: Date){
+  const todayString: string = dayIn.getFullYear().toString() 
+    + "-" + dayIn.getMonth().toString().padStart(2,'0') 
+    + "-" + dayIn.getDate().toString().padStart(2,'0');
+    return todayString;
+}
+
+export function subtractDays(today: Date, gap: number){
+  today.setDate(today.getDate() - gap);
+  return today;
+}

@@ -5,31 +5,44 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   } from 'recharts';
 import * as d3 from 'd3';
-import {pivotJsonTableData, timeStampStringToDate} from '../../DummyData/dataFormatter';
+import {pivotJsonTableData, timeStampStringToDate, getDateString, subtractDays} from '../../DummyData/dataFormatter';
 import axios from '../../Containers/HttpRequestController/axiosEmissionsRequester';
+import {connect} from 'react-redux';
+interface IProps {
+    props?: any;
+    chartRedux?: any;
+}
 
 interface IState {
-    axiosData?: any;
-  }
+    chartData?: undefined;
+    today?: string;
+    startDate?: string;
+}
 
-class ChartLines extends Component {
-
-    state = {
-        axiosData: undefined,
-        dataLoaded: false
+class ChartLines extends Component<IProps, IState> {
+    constructor(props: any){
+        super(props);
+        this.todayDate = new Date();
+        this.today = getDateString(this.todayDate);
+        this.state = {
+            chartData: undefined,
+            today: this.today,
+            startDate: getDateString(subtractDays(this.todayDate, this.props.chartRedux.DayRange))
+        };
     }
 
-    scraperData: any;
+    // scraperData: any;
+    todayDate: Date;
+    today: string;
 
     componentDidMount(){
-        axios.get('/PJM?start=2020-04-01-01&end=2020-04-02-23')
+        axios.get('/' + this.props.chartRedux.BA 
+            + '?start=' 
+            + this.state.startDate 
+            + '&end=' 
+            + this.state.today )
             .then(response => {
-                this.setState(
-                    {
-                        axiosData: pivotJsonTableData(response.data),
-                        dataLoaded: true
-                    });
-                this.scraperData = response.data;
+                this.setState({chartData: pivotJsonTableData(response.data)});
             })
             .catch(error => {
                 console.log('ERROR:\n' + error);
@@ -37,10 +50,9 @@ class ChartLines extends Component {
     }
 
     render(){
-
         return(
             <div>
-                <LineChart width={600} height={300} data={this.state.axiosData}
+                <LineChart width={600} height={300} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <XAxis dataKey="cleanDate"/>
                     <YAxis/>
@@ -54,8 +66,14 @@ class ChartLines extends Component {
             </div>
         );
     }
-
 }
 
-export default ChartLines;
+function mapStateToProps(reduxState: any){
+    return {
+        chartRedux: reduxState
+    }
+}
+
+// export default ChartLines;
+export default connect(mapStateToProps)(ChartLines)
 
