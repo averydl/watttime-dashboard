@@ -35,11 +35,34 @@ function nestedMapToJson(mapIn: Map<string, Map<string, any>>): any {
     tempJson[key] = entry;
     jsonArray.push(entry);
   });
-  return jsonArray.sort(compareDate);
+  return insertCleanDate(jsonArray.sort(compareDate));
 }
 
 function compareDate(a: any, b: any) {
   if (a.dateTime > b.dateTime) return 1;
   if (b.dateTime > a.dateTime) return -1;
   return 0;
+}
+
+function insertCleanDate(dataIn: any[]): any {
+  dataIn.forEach((d) => {
+    const dateObj = new Date(d.dateTime);
+    d['cleanDate'] = dateObj.toDateString() + ", " 
+      + dateObj.getHours().toString().padStart(2, '0') + ":" 
+      + dateObj.getMinutes().toString().padEnd(2,'0');
+  });
+  return dataIn;
+}
+
+export function getDateString(dayIn: Date){
+  const todayString: string = dayIn.getFullYear().toString() 
+    + "-" + (dayIn.getMonth() + 1).toString().padStart(2,'0') 
+    + "-" + dayIn.getDate().toString().padStart(2,'0');
+    return todayString;
+}
+
+export function subtractDays(today: Date, gap: number){
+  const newDate: Date = new Date(today.getTime());
+  newDate.setDate(today.getDate() - gap);
+  return newDate;
 }
