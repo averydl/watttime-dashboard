@@ -10,7 +10,7 @@
     "@types/d3-time": "^1.0.10",
     "@types/d3-time-format": "^2.1.1",
     "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.39",
+    "@types/node": "^12.12.43",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/recharts": "^1.8.10",
@@ -49,6 +49,6 @@
     "@angular/core": "^9.1.9",
     "@angular/platform-browser": "^9.1.9",
     "@angular/platform-browser-dynamic": "^9.1.9",
-    "@syncfusion/ej2-angular-navigations": "^18.1.54"
+    "@syncfusion/ej2-angular-navigations": "^18.1.55"
   }
 }

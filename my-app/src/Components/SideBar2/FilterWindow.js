@@ -1,24 +1,14 @@
 import React from 'react'
-
-// import React, { Component } from 'react';
-// import Calendar from 'react-calendar';
+import Calendar from 'react-calendar';
 
 class FilterWindow extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedDateRange: 'sortByDateRange',
       selectedBalancingAuthority: 'sortByBalancingAuthority',
-      // date: new Date(),
+      startDate: new Date(),
+      endDate: new Date(), 
     }
-  }
-
-  // Drop down
-  handleDropDownDateRange = (e) => {
-    this.setState({
-      selectedDateRange: e.target.value,
-    })
-    console.log('You have submitted: ', e.target.value, ' day(s).')
   }
 
   handleDropDownBalancingAuthority = (e) => {
@@ -28,7 +18,9 @@ class FilterWindow extends React.Component {
     console.log('You have submitted: ', e.target.value, ' balancing authority.')
   }
 
-  // onChange = date => this.setState({ date })
+  onChangeStartDate = startDate => this.setState({ startDate })
+
+  onChangeEndDate = endDate => this.setState({ endDate })
 
   // Apply filters
   applyFilters = (e) => {
@@ -42,25 +34,25 @@ class FilterWindow extends React.Component {
       <div className='sidebar-navigation'>
         {/* Apply Filters Form */}
         <form onSubmit={(e) => this.applyFilters(e)}>
-          
-          {/* Sort By Date Range */}
-          <div className='drop-down'>
-            <select
-              class='block'
-              value={this.state.selectedDateRange}
-              onChange={(e) => this.handleDropDownDateRange(e)}
-              id='sortByDateRange'
-            >
-              <option value='sortByDateRange'>Date Range</option>
-              <option value='1'>1 Day</option>
-              <option value='2'>2 Days</option>
-              <option value='3'>3 Days</option>
-              <option value='4'>4 Days</option>
-              <option value='5'>5 Days</option>
-              <option value='6'>6 Days</option>
-              <option value='7'>7 Days</option>
-            </select>
+
+          {/* Calendar Start Date */}
+          <h2>Select Start Date</h2>
+          <div>
+            <Calendar
+              onChange={this.onChangeStartDate}
+              value={this.state.startDate}
+            />
           </div>
+          
+          {/* Calendar End Date */}
+          <h2>Select End Date</h2>
+          <div>
+            <Calendar
+              onChange={this.onChangeEndDate}
+              value={this.state.endDate}
+            />
+          </div>
+          
           <br></br>
 
           {/* Sort By Balancing Authority */}
@@ -140,15 +132,9 @@ class FilterWindow extends React.Component {
               <option value='WAUW'>WAUW</option>
             </select>
           </div>
+
           <br></br>
-
-          {/* <div>
-            <Calendar
-              onChange={this.onChange}
-              value={this.state.date}
-            />
-          </div> */}
-
+          
           {/* Apply Filters Button */}
           <button type='submit' class='block'>
             Apply Filters
