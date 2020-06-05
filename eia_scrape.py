@@ -150,13 +150,16 @@ def get_derived_data(data):
     result = pd.DataFrame()
     # chart 1 information
     result['load'] = data['load']
+    result['generation'] = data['total_gen']
     result['fossil'] = data[fossil_fuels].sum(axis=1)
     result['carbon_free'] = data[carbon_free].sum(axis=1)
+    result['renewables'] = data[renewables].sum(axis=1)
 
     # chart 2 information
-    result['change_fossil'] = result['fossil'].pct_change().round(4)*100
-    result['change_carbon_free'] = result['carbon_free'].pct_change().round(4)*100
-    result['change_renewables'] = data[renewables].sum(axis=1).pct_change().round(4)*100
+    result['change_gen'] = result['generation'].diff()
+    result['change_fossil'] = result['fossil'].diff().div(result['generation'].diff()).mul(100).round(2)
+    result['change_carbon_free'] = result['carbon_free'].diff().div(result['generation'].diff()).mul(100).round(2)
+    result['change_renewables'] = result['renewables'].diff().div(result['generation'].diff()).mul(100).round(2)
 
     return result
 
