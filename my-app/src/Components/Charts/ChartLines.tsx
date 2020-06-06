@@ -112,8 +112,8 @@ class ChartLines extends Component<IProps, IState> {
                     <YAxis/>
                     <Tooltip content={<CustomTooltip fullData={this.state.chartData}/>}/>
                     <Legend />
-                    <Line type="monotone" dataKey="load" stroke="#8884d8" dot={false} name="Load" />
-                    <Line type="monotone" dataKey="carbon_free" stroke="#5ad178" dot={false} name="Carbon Free" />
+                    <Line type="monotone" dataKey="load" stroke="black" dot={false} name="Load" />
+                    <Line type="monotone" dataKey="carbon_free" stroke="#4db8ff" dot={false} name="Carbon Free" />
                     <Line type="monotone" dataKey="fossil" stroke="#fa0a0a" dot={false} name="Fossil" />
                 </LineChart>
             </div>
