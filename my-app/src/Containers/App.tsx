@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import ChartLines from '../Components/Charts/ChartLines';
-import FilterWindow from '../Components/SideBar2/FilterWindow';
+import FilterWindow from '../Components/SideBar/FilterWindow';
 
 function App() {
   return (
