@@ -2,6 +2,7 @@ import React from 'react'
 import Calendar from 'react-calendar';
 import { connect } from 'react-redux';
 import { chooseBA, chooseDays, chooseEndDay } from '../../actions/filterMenu';
+import 'react-calendar/dist/Calendar.css';
 
 class FilterWindow extends React.Component {
   constructor(props) {

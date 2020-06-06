@@ -76,10 +76,10 @@ class ChartLines extends Component<IProps, IState> {
 
     componentDidUpdate(){
         console.log("will update");
-        if(this.state.startDate != this.props.chartRedux.StartDay ||
-            this.state.endDate != this.props.chartRedux.EndDay ||
+        if(this.state.startDate != getDateString(this.props.chartRedux.StartDay) ||
+            this.state.endDate != getDateString(this.props.chartRedux.EndDay) ||
              this.state.selectedBA != this.props.chartRedux.BA){
-            const startDate = getDateString((this.props.chartRedux.StartDay));
+            const startDate = getDateString(this.props.chartRedux.StartDay);
             axios.get('/' + this.props.chartRedux.BA 
             + '?start=' 
             + startDate
@@ -91,8 +91,8 @@ class ChartLines extends Component<IProps, IState> {
                     chartData: pivotJsonTableData(response.data),
                     days: this.props.chartRedux.DayRange,
                     selectedBA: this.props.chartRedux.BA,
-                    startDate: this.props.chartRedux.StartDay,
-                    endDate: this.props.chartRedux.EndDay,
+                    startDate: getDateString(this.props.chartRedux.StartDay),
+                    endDate: getDateString(this.props.chartRedux.EndDay),
                 });
             })
             .catch(error => {
@@ -105,7 +105,7 @@ class ChartLines extends Component<IProps, IState> {
         console.log("render");
         return(
             <div>
-                <h1>{this.state.selectedBA + ": from " + this.state.startDate + " to " + this.state.endDate}</h1>
+                <h1>{this.state.selectedBA + ' emissions'}</h1>
                 <LineChart width={700} height={400} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <XAxis dataKey="shortDate" type='category' allowDuplicatedCategory={true}/>

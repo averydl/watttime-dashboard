@@ -75,11 +75,11 @@
 }
 
 .chart-column{
-  flex: 75%;
+  flex: 80%;
   padding: 10px;
 }
 
 .menu-column{
-  flex: 25%;
+  flex: 20%;
   padding: 10px;
 }
