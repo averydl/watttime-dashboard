@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   } from 'recharts';
-import * as d3 from 'd3';
+import {BarChart, Bar} from 'recharts';
 import './CustomToolTip.css';
 
 
@@ -11,23 +11,35 @@ const CustomToolTip = (props: any) => {
 
   if (active && props.fullData) {
     const { payload, label } = props;
-    const dataPoint: any = props.fullData.find((o: { cleanDate: any; }) => {
-      return o.cleanDate === label;
-    });
+    const dataPoint: any = payload[0].payload;
 
-    if(dataPoint.change_fossil && dataPoint.change_carbon_free && dataPoint.change_renewables){
+    if(dataPoint && dataPoint.change_fossil && dataPoint.change_carbon_free && dataPoint.change_renewables){
+      const barData: any = [
+        {
+          "name": "Percent Change",
+          "Fossil": dataPoint.change_fossil,
+          "Carbon Free": dataPoint.change_carbon_free,
+          "Renewables": dataPoint.change_renewables,
+        }];
       return (
         <div className="custom-tooltip">
-          <p className="label">{`Time: ${label}`}</p>
-          <p className="label">{`Fossil Fuel Change: ${dataPoint.change_fossil}%`}</p>
-          <p className="label">{`Carbon Free Change: ${dataPoint.change_carbon_free}%`}</p>
-          <p className="label">{`Renewables Change: ${dataPoint.change_renewables}%`}</p>
+          <p className="label">{dataPoint.cleanDate}</p>
+          <BarChart width={300} height={200} data={barData}>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="Fossil" fill='#ff1a1a' />
+            <Bar dataKey="Carbon Free" fill='#4db8ff' />
+            <Bar dataKey="Renewables" fill='#5cd65c' />
+          </BarChart>
+
         </div>
       );
     } else {
       return (
         <div className="custom-tooltip">
-          <p className="label">{`Time: ${label}`}</p>
+          <p className="label">{`Time: ${dataPoint.cleanDate}`}</p>
         </div>
       );
     }

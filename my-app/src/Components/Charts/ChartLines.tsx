@@ -96,16 +96,15 @@ class ChartLines extends Component<IProps, IState> {
         return(
             <div>
                 <h1>{this.state.selectedBA + " - past " + this.state.days + " days"}</h1>
-                <LineChart width={600} height={300} data={this.state.chartData}
+                <LineChart width={700} height={400} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                    <XAxis dataKey="cleanDate"/>
+                    <XAxis dataKey="shortDate" type='category' allowDuplicatedCategory={true}/>
                     <YAxis/>
-                    <CartesianGrid strokeDasharray="3 3"/>
                     <Tooltip content={<CustomTooltip fullData={this.state.chartData}/>}/>
                     <Legend />
-                    <Line type="monotone" dataKey="load" stroke="#8884d8" />
-                    <Line type="monotone" dataKey="carbon_free" stroke="#5ad178" />
-                    <Line type="monotone" dataKey="fossil" stroke="#fa0a0a" />
+                    <Line type="monotone" dataKey="load" stroke="#8884d8" dot={false} name="Load" />
+                    <Line type="monotone" dataKey="carbon_free" stroke="#5ad178" dot={false} name="Carbon Free" />
+                    <Line type="monotone" dataKey="fossil" stroke="#fa0a0a" dot={false} name="Fossil" />
                 </LineChart>
             </div>
         );
