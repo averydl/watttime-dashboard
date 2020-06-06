@@ -18,6 +18,7 @@ interface IState {
     chartData?: undefined;
     today?: any;
     startDate?: any;
+    endDate?: any;
     selectedBA?: any;
     days?: any;
     shouldUpdate?: boolean;
@@ -31,7 +32,8 @@ class ChartLines extends Component<IProps, IState> {
         this.state = {
             chartData: undefined,
             today: this.today,
-            startDate: getDateString(subtractDays(this.todayDate, this.props.chartRedux.DayRange)),
+            startDate: getDateString(this.props.chartRedux.StartDay),
+            endDate: getDateString(this.props.chartRedux.EndDay),
             selectedBA: this.props.chartRedux.BA,
             days: this.props.chartRedux.DayRange,
             shouldUpdate: true,
@@ -46,8 +48,10 @@ class ChartLines extends Component<IProps, IState> {
         console.log(this.state);
         console.log(this.props.chartRedux);
         axios.get('/' + this.props.chartRedux.BA 
-            + '?days=' 
-            + this.state.days)
+            + '?start=' 
+            + this.state.startDate
+            + '&end='
+            + this.state.endDate)
             .then(response => {
                 this.setState({
                     ...this.state,
@@ -72,17 +76,23 @@ class ChartLines extends Component<IProps, IState> {
 
     componentDidUpdate(){
         console.log("will update");
-        if(this.state.days != this.props.chartRedux.DayRange || this.state.selectedBA != this.props.chartRedux.BA){
-            const startDate = getDateString(subtractDays(this.todayDate, parseInt(this.props.chartRedux.DayRange)));
+        if(this.state.startDate != this.props.chartRedux.StartDay ||
+            this.state.endDate != this.props.chartRedux.EndDay ||
+             this.state.selectedBA != this.props.chartRedux.BA){
+            const startDate = getDateString((this.props.chartRedux.StartDay));
             axios.get('/' + this.props.chartRedux.BA 
-            + '?days=' 
-            + this.props.chartRedux.DayRange )
+            + '?start=' 
+            + startDate
+            + '&end='
+            + this.state.endDate)
             .then(response => {
                 this.setState({
                     ...this.state,
                     chartData: pivotJsonTableData(response.data),
                     days: this.props.chartRedux.DayRange,
-                    selectedBA: this.props.chartRedux.BA
+                    selectedBA: this.props.chartRedux.BA,
+                    startDate: this.props.chartRedux.StartDay,
+                    endDate: this.props.chartRedux.EndDay,
                 });
             })
             .catch(error => {
@@ -95,7 +105,7 @@ class ChartLines extends Component<IProps, IState> {
         console.log("render");
         return(
             <div>
-                <h1>{this.state.selectedBA + " - past " + this.state.days + " days"}</h1>
+                <h1>{this.state.selectedBA + ": from " + this.state.startDate + " to " + this.state.endDate}</h1>
                 <LineChart width={700} height={400} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <XAxis dataKey="shortDate" type='category' allowDuplicatedCategory={true}/>
