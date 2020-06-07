@@ -9,6 +9,8 @@ import {pivotJsonTableData, timeStampStringToDate, getDateString, subtractDays} 
 import axios, {requestEmissions} from '../../Containers/HttpRequestController/axiosEmissionsRequester';
 import {connect} from 'react-redux';
 import CustomTooltip from './CustomToolTip';
+import '../../Components/Loader/Loader.css';
+
 interface IProps {
     props?: any;
     chartRedux?: any;
@@ -22,11 +24,13 @@ interface IState {
     selectedBA?: any;
     days?: any;
     shouldUpdate?: boolean;
+    fetchComplete?: boolean;
 }
 
 class ChartLines extends Component<IProps, IState> {
     constructor(props: any){
         super(props);
+        this.chartHeader = <div className="loader">Loading...</div>;
         this.todayDate = new Date();
         this.today = getDateString(this.todayDate);
         this.state = {
@@ -42,11 +46,10 @@ class ChartLines extends Component<IProps, IState> {
 
     todayDate: Date;
     today: string;
+    chartHeader: any;
 
     componentDidMount(){
-        console.log("did mount");
-        console.log(this.state);
-        console.log(this.props.chartRedux);
+        this.chartHeader = <div className="loader">Loading...</div>;
         axios.get('/' + this.props.chartRedux.BA 
             + '?start=' 
             + this.state.startDate
@@ -57,28 +60,21 @@ class ChartLines extends Component<IProps, IState> {
                     ...this.state,
                     chartData: pivotJsonTableData(response.data),
                     days: this.props.chartRedux.DayRange,
-                    selectedBA: this.props.chartRedux.BA
+                    selectedBA: this.props.chartRedux.BA,
                 });
+                this.chartHeader = <h1>{this.state.selectedBA + ' emissions'}</h1>;
+                this.forceUpdate();
             })
             .catch(error => {
                 console.log('ERROR:\n' + error);
             });
     }
 
-    shouldComponentUpdate(){
-        console.log("should update");
-        return true;
-    }
-
-    componentWillReceiveProps(){
-        console.log("will receive props");
-    }
-
     componentDidUpdate(){
-        console.log("will update");
+        this.chartHeader = <div className="loader">Loading...</div>;
         if(this.state.startDate != getDateString(this.props.chartRedux.StartDay) ||
-            this.state.endDate != getDateString(this.props.chartRedux.EndDay) ||
-             this.state.selectedBA != this.props.chartRedux.BA){
+        this.state.endDate != getDateString(this.props.chartRedux.EndDay) ||
+        this.state.selectedBA != this.props.chartRedux.BA){
             const startDate = getDateString(this.props.chartRedux.StartDay);
             axios.get('/' + this.props.chartRedux.BA 
             + '?start=' 
@@ -94,6 +90,8 @@ class ChartLines extends Component<IProps, IState> {
                     startDate: getDateString(this.props.chartRedux.StartDay),
                     endDate: getDateString(this.props.chartRedux.EndDay),
                 });
+                this.chartHeader = <h1>{this.state.selectedBA + ' emissions'}</h1>;
+                this.forceUpdate();
             })
             .catch(error => {
                 console.log('ERROR:\n' + error);
@@ -102,10 +100,9 @@ class ChartLines extends Component<IProps, IState> {
     }
 
     render(){
-        console.log("render");
         return(
             <div>
-                <h1>{this.state.selectedBA + ' emissions'}</h1>
+                {this.chartHeader}
                 <LineChart width={700} height={400} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}} syncId="lineChartID_01">
                     <XAxis dataKey="shortDate" type='category' allowDuplicatedCategory={true}/>
