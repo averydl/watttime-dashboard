@@ -109,7 +109,7 @@ class ChartLines extends Component<IProps, IState> {
                 <LineChart width={700} height={400} data={this.state.chartData}
                 margin={{top: 5, right: 30, left: 20, bottom: 5}} syncId="lineChartID_01">
                     <XAxis dataKey="shortDate" type='category' allowDuplicatedCategory={true}/>
-                    <YAxis/>
+                    <YAxis tickFormatter={(value: any) => new Intl.NumberFormat('en').format(value)}/>
                     <Tooltip content={<CustomTooltip fullData={this.state.chartData}/>}/>
                     <Legend />
                     <Line type="monotone" dataKey="load" stroke="black" dot={false} name="Load" />
@@ -134,8 +134,8 @@ class ChartLines extends Component<IProps, IState> {
                         </linearGradient>
                     </defs>
                     <XAxis dataKey="cleanDate" hide={true}/>
-                    <YAxis />
-                    <Tooltip />
+                    <YAxis tickFormatter={(value: any) => new Intl.NumberFormat('en').format(value)}/>
+                    <Tooltip formatter={(value: any) => new Intl.NumberFormat('en').format(value)} />
                     <Area type="monotone" dataKey="generation" stroke="#8884d8" fillOpacity={1} fill="url(#colorBlue)" />
                     <Area type="monotone" dataKey="fossil" stroke="#fc3003" fillOpacity={1} fill="url(#colorRed)" />
                     <Area type="monotone" dataKey="renewables" stroke="#82ca9d" fillOpacity={1} fill="url(#colorGreen)" />
