@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import dummyData from '../../DummyData/power.json';
 import scraperData from '../../DummyData/DummyScraperData.json';
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   } from 'recharts';
 import * as d3 from 'd3';
 import {pivotJsonTableData, timeStampStringToDate, getDateString, subtractDays} from '../../DummyData/dataFormatter';
@@ -107,7 +107,7 @@ class ChartLines extends Component<IProps, IState> {
             <div>
                 <h1>{this.state.selectedBA + ' emissions'}</h1>
                 <LineChart width={700} height={400} data={this.state.chartData}
-                margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                margin={{top: 5, right: 30, left: 20, bottom: 5}} syncId="lineChartID_01">
                     <XAxis dataKey="shortDate" type='category' allowDuplicatedCategory={true}/>
                     <YAxis/>
                     <Tooltip content={<CustomTooltip fullData={this.state.chartData}/>}/>
@@ -115,7 +115,32 @@ class ChartLines extends Component<IProps, IState> {
                     <Line type="monotone" dataKey="load" stroke="black" dot={false} name="Load" />
                     <Line type="monotone" dataKey="carbon_free" stroke="#4db8ff" dot={false} name="Carbon Free" />
                     <Line type="monotone" dataKey="fossil" stroke="#fa0a0a" dot={false} name="Fossil" />
-                </LineChart>
+                </LineChart> 
+
+                <AreaChart width={700} height={400} data={this.state.chartData}
+                margin={{ top: 10, right: 30, left: 20, bottom: 5 }} syncId="lineChartID_01">
+                    <defs>
+                        <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                        </linearGradient>
+                        <linearGradient id="colorGreen" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+                        </linearGradient>
+                        <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#fc3003" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#fc3003" stopOpacity={0}/>
+                        </linearGradient>
+                    </defs>
+                    <XAxis dataKey="cleanDate" hide={true}/>
+                    <YAxis />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="generation" stroke="#8884d8" fillOpacity={1} fill="url(#colorBlue)" />
+                    <Area type="monotone" dataKey="fossil" stroke="#fc3003" fillOpacity={1} fill="url(#colorRed)" />
+                    <Area type="monotone" dataKey="renewables" stroke="#82ca9d" fillOpacity={1} fill="url(#colorGreen)" />
+                </AreaChart>
+
             </div>
         );
     }
