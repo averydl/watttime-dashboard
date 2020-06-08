@@ -4,180 +4,198 @@ import json
 from dateutil.parser import parse
 import pandas as pd
 import re
-import ipdb
 import datetime
+import config
+import logging
+
+class EIAScraper:
+    def __init__(self, logger):
+        self.key = config.API_KEY
+        self.log = logger
+        self.cachelog = {}
+
+    def get_api_data(self, ba, category, name_func):
+        self.log.info(f'Fetching category IDs for BA {ba}')
+        category_id = config.CATEGORY_IDS.get(category)
+        if not category_id:
+            self.log.warning(f'Category {category} is not supported')
+            return None
+
+        series_ids = self.get_series_ids(ba, category_id, name_func)
+        if not series_ids:
+            self.log.warning(f'Could not find series for category {category_id} for ba {ba}')
+            return None
+
+        df = pd.DataFrame(columns=['ts'])
+
+        for series_id, name in series_ids.items():
+            self.log.info(f'getting {category} from {name}')
+            url = config.SERIES_URL.format(self.key, series_id)
+            data = self.get_url_data(url, name)
+
+            if data is not None:
+                df = df.merge(data, on='ts', how='outer')
+            else:
+                self.log.warning(f'Failed to fetch series {name} for {ba}')
+
+        df['ts'] = df['ts'].apply(parse)
+        df.set_index('ts', inplace=True)
+        return df
 
 
-BA_LIST = [
-    'YAD', 'AZPS', 'DEAA', 'AECI', 'AVRN',
-    'AVA', 'BANC', 'BPAT', 'CISO', 'HST',
-    'TPWR', 'TAL', 'DUK', 'FPC', 'CPLE',
-    'CPLW', 'EPE', 'EEI', 'ERCO', 'FMPP',
-    'FPL', 'GVL', 'GLHB', 'GRID', 'GRIF',
-    'ISNE', 'IPCO', 'IID', 'JEA', 'LDWP',
-    'LGEE', 'MISO', 'GWA', 'WWA', 'NEVP',
-    'HGMA', 'NYIS', 'NWMT', 'OVEC', 'PJM',
-    'DOPD', 'PACE', 'PACW', 'PGE', 'AEC',
-    'PSCO', 'PNM', 'CHPD', 'GCPD', 'PSEI',
-    'SRP', 'SCL', 'SEC', 'SCEG', 'SC',
-    'SEPA', 'SOCO', 'SWPP', 'SPA', 'TEC',
-    'TVA', 'TEPC', 'TIDC', 'NSB', 'WALC',
-    'WACM', 'WAUW'
-]
-
-FOSSIL_FUELS = ['coal', 'natural gas', 'other', 'petroleum']
-NON_FOSSIL_FUELS = ['hydro', 'nuclear', 'solar', 'wind']
-RENEWABLES = ['solar', 'wind']
-
-CATEGORY_IDS = {
-        'generation': 3390101,
-        'interchange': 2123637,
-        'load': 2122628
-}
-
-CATEGORY_URL = 'http://api.eia.gov/category/?api_key={}&category_id={}'
-SERIES_URL = 'http://api.eia.gov/series/?api_key={}&series_id={}'
-
-# TODO: revert change below to hide api key again
-# API_KEY = environ['API_KEY']
-API_KEY = '49ef27c46c0ed988547e991c643cafec'
-CUR_DIR = path.abspath(__file__)
-TEMPFILE = path.join(CUR_DIR, 'temp.csv')
+    def _load_name(self, name):
+        return 'load'
 
 
-def get_api_data(ba, category, name_func):
-    category_id = CATEGORY_IDS.get(category)
-    if not category_id:
-        print(f'Category {category} is not supported')
-        return None
-
-    series_ids = get_series_ids(ba, category_id, name_func)
-    df = pd.DataFrame(columns=['ts'])
-
-    for series_id, name in series_ids.items():
-        print(f'getting {category} from {name}')
-        url = SERIES_URL.format(API_KEY, series_id)
-        success, err, series_df = get_url_data(url, name)
-        if success:
-            df = df.merge(series_df, on='ts', how='outer')
-
-    df['ts'] = df['ts'].apply(parse)
-    df.set_index('ts', inplace=True)
-    return df
+    def _gen_name(self, name):
+        return name.split('Net generation from ')[1].split(' for')[0]
 
 
-def _load_name(name):
-    return 'load'
+    def get_series_ids(self, ba_code, cat_id, name_func):
+        url = config.CATEGORY_URL.format(self.key, cat_id)
+        ba_cat = None
+
+        data = self.get_url_data(url, raw=True)
+        data = json.loads(data)['category']['childcategories']
+        for cat_data in data:
+            if f'({ba_code})' in cat_data['name']:
+                ba_cat = cat_data['category_id']
+                self.log.info(f'Found category ID {ba_cat} for {ba_code}')
+                break
+
+        if not ba_cat:
+            self.log.warning(f'Failed to find category ID for {ba_code}')
+            return None
+
+        url = config.CATEGORY_URL.format(self.key, ba_cat)
+        data = self.get_url_data(url, raw=True)
+        data = json.loads(data)['category']['childseries']
+        series_ids = {}
+        for cat_data in data:
+            if 'UTC' in cat_data['name']:
+                name = name_func(cat_data['name'])
+                series_ids[cat_data['series_id']] = name
+        return series_ids
 
 
-def _gen_name(name):
-    return name.split('Net generation from ')[1].split(' for')[0]
+    def get_url_data(self, url, col_name=None, raw=False):
+        code = None
+        data = None
+        try:
+            response = requests.get(url, timeout=60)
+            data = response.text
+            code = response.status_code
+            if not raw:
+                data = response.json()['series']
+                df = pd.DataFrame()
+                for series in data:
+                    _df = pd.DataFrame(series['data'], columns=['ts', col_name])
+                    data = pd.concat([_df, df])
+        except BaseException as e:
+            self.log.error(f'Error getting EIA data: {e}, {code}, {data}')
+            return None
+
+        return data
+
+    def get_raw_data(self, ba):
+        if ba not in config.BA_LIST:
+            self.log.warning(f'Balancing Authority {ba} is not supported/does not exist')
+            return None
+
+        self.log.info('Fetching load data from EIA')
+        load = self.get_api_data(ba, 'load', self._load_name)
+        self.log.info('Fetching generation data from EIA')
+        fuel = self.get_api_data(ba, 'generation', self._gen_name)
+
+        if fuel is None:
+            self.log.warning('BA did not return required generation data')
+            data = None
+        elif load is None:
+            self.log.warning('BA did not return any load data')
+            data = fuel
+        else:
+            fuel.join(load, on='ts')
+            data = fuel
+
+        return data
 
 
-def get_series_ids(ba_code, cat_id, name_func):
-    # ba_code = ABBREV_TO_CODE[abbrev]
-    url = CATEGORY_URL.format(API_KEY, cat_id)
+    def get_derived_data(self, data, start, end):
+        data = data.reset_index()
+        date_range = data['ts'].between(start, end, inclusive=True)
+        data = data[date_range].sort_values(by='ts')
+        data.set_index('ts', inplace=True)
 
-    success, err, data = get_url_data(url, raw=True)
-    data = json.loads(data)['category']['childcategories']
-    for cat_data in data:
-        if f'({ba_code})' in cat_data['name']:
-            ba_cat = cat_data['category_id']
-            break
+        fossil_fuels = [fuel for fuel in data.keys() if fuel in config.FOSSIL_FUELS]
+        carbon_free = [fuel for fuel in data.keys() if fuel in config.NON_FOSSIL_FUELS]
+        renewables = [fuel for fuel in data.keys() if fuel in config.RENEWABLES]
+        total = list(set(fossil_fuels + carbon_free + renewables))
 
-    url = CATEGORY_URL.format(API_KEY, ba_cat)
-    success, err, data = get_url_data(url, raw=True)
-    data = json.loads(data)['category']['childseries']
-    series_ids = {}
-    for cat_data in data:
-        if 'UTC' in cat_data['name']:
-            name = name_func(cat_data['name'])
-            series_ids[cat_data['series_id']] = name
-    return series_ids
+        result = pd.DataFrame()
+        columns = data.columns
+        # chart 1 information
+        if 'load' in columns:
+            result['load'] = data['load']
+        else:
+            result['load'] = 0
 
+        result['generation'] = data[total].sum(axis=1)
+        result['fossil'] = data[fossil_fuels].sum(axis=1)
+        result['carbon_free'] = data[carbon_free].sum(axis=1)
+        result['renewables'] = data[renewables].sum(axis=1)
 
-def get_url_data(url, col_name=None, raw=False):
-    code = None
-    data = None
-    try:
-        response = requests.get(url, timeout=60)
-        data = response.text
-        code = response.status_code
-        if not raw:
-            data = response.json()['series']
-            df = pd.DataFrame()
-            for series in data:
-                _df = pd.DataFrame(series['data'], columns=['ts', col_name])
-                data = pd.concat([_df, df])
-    except BaseException as e:
-        print('Error getting EIA data: {}, {}, {}'.format(
-            e, code, data))
-        ipdb.set_trace()
-        return False, 'Error getting data', None
+        # chart 2 information
+        result['change_fossil'] = result['fossil'].diff().div(result['generation'].diff()).mul(100).round(2)
+        result['change_carbon_free'] = result['carbon_free'].diff().div(result['generation'].diff()).mul(100).round(2)
+        result['change_renewables'] = result['renewables'].diff().div(result['generation'].diff()).mul(100).round(2)
 
-    return True, None, data
+        result.fillna(0, inplace=True)
+        return result
 
 
-def total_gen(x):
-    return sum([x[col] for col in x.index if col not in ['load', 'ts_x']])
+    def get_data(self, ba, start, end):
+        if self.is_cached(ba):
+            raw_data = self.uncache(ba)
+        else:
+            raw_data = self.get_raw_data(ba)
+            self.cache(ba, raw_data)
+
+        if raw_data is None:
+            return None
+        result = self.get_derived_data(raw_data, start, end)
+        return result
 
 
-def make_dataframe(load, fuel):
-    load_fuel = fuel.join(load, on='ts')
-    load_fuel.fillna(0, inplace=True)
-    load_fuel['total_gen'] = load_fuel.apply(total_gen, axis=1)
-    return load_fuel
+    def cache(self, ba, data):
+        self.cachelog[ba] = datetime.datetime.now()
+        data.to_pickle(f'cache/{ba}.pkl')
 
 
-def get_raw_data(ba, start, end):
-    if ba not in BA_LIST:
-        print(f'Balancing Authority {ba} is not supported/does not exist')
-        return
+    def uncache(self, ba):
+        try:
+            data = pd.read_pickle(f'cache/{ba}.pkl')
+            return data
+        except Exception as e:
+            self.log.info(f'Could not read cache data for {ba}: {e}')
+            return None
 
-    load = get_api_data(ba, 'load', _load_name)
-    fuel = get_api_data(ba, 'generation', _gen_name)
-    data = make_dataframe(load, fuel)
-    data = data.reset_index()
-    date_range = data['ts'].between(start, end, inclusive=True)
-    data = data[date_range].sort_values(by='ts')
-    data.set_index('ts', inplace=True)
-    return data
+    def is_cached(self, ba):
+        if ba not in self.cachelog:
+            self.log.info(f'No data has been cached for {ba}')
+            return False
+        elif (datetime.datetime.now() - self.cachelog[ba]).seconds > 300:
+            self.log.info(f'Cached data for {ba} has expired')
+            return False
+        else:
+            self.log.info(f'Data is cached for {ba}')
+            return True
 
-
-def get_derived_data(data):
-    fossil_fuels = [fuel for fuel in data.keys() if fuel in FOSSIL_FUELS]
-    carbon_free = [fuel for fuel in data.keys() if fuel in NON_FOSSIL_FUELS]
-    renewables = [fuel for fuel in data.keys() if fuel in RENEWABLES]
-
-    result = pd.DataFrame()
-    # chart 1 information
-    result['load'] = data['load']
-    result['generation'] = data['total_gen']
-    result['fossil'] = data[fossil_fuels].sum(axis=1)
-    result['carbon_free'] = data[carbon_free].sum(axis=1)
-    result['renewables'] = data[renewables].sum(axis=1)
-
-    # chart 2 information
-    result['change_gen'] = result['generation'].diff()
-    result['change_fossil'] = result['fossil'].diff().div(result['generation'].diff()).mul(100).round(2)
-    result['change_carbon_free'] = result['carbon_free'].diff().div(result['generation'].diff()).mul(100).round(2)
-    result['change_renewables'] = result['renewables'].diff().div(result['generation'].diff()).mul(100).round(2)
-
-    return result
-
-
-def get_data(ba, start, end):
-    raw_data = get_raw_data(ba, start, end)
-    result = get_derived_data(raw_data)
-    return result
 
 # TODO: Add unittest module & improve testing/cover more test cases
 # start = parse('2020-05-01 00:00:00+00:00')
 # end = parse('2020-05-1 23:00:00+00:00')
-
-# data = get_raw_data('CISO', start, end)
-# table_data = get_derived_data(data)
-
+# client = EIAScraper(logging.getLogger(__name__))
+# logging.basicConfig()
+# data = client.get_data('CISO', start, end)
 # print(data)
-# print(table_data)
-# print(table_data.to_json())
+

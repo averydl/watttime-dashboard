@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+*.DS_Store
+*__pycache__/
+*config.py
+logs/
+cache/
+=======
 
 __pycache__/eia_scrape.cpython-37.pyc
 
@@ -396,3 +403,4 @@ node_modules/\@types/react-redux/LICENSE
 node_modules/\@types/react-redux/package.json
 
 node_modules/\@types/react-redux/README.md
+>>>>>>> typScriptOutline
