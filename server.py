@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from eia_scrape import EIAScraper
 from dateutil.parser import parse
 import pytz
@@ -45,8 +45,9 @@ def emissions(ba):
         if data is None:
             app.logger.warning('API did not return any data')
             return f'Data not found for {ba}', 404
-        print(data)
-        return data.to_json()
+        resp = Response(data.to_json())
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
     else:
         return f'{message}', code
 

@@ -12,6 +12,7 @@ class EIAScraper:
     def __init__(self, logger):
         self.key = config.API_KEY
         self.log = logger
+        self.cachelog = {}
 
     def get_api_data(self, ba, category, name_func):
         self.log.info(f'Fetching category IDs for BA {ba}')
@@ -96,7 +97,7 @@ class EIAScraper:
 
         return data
 
-    def get_raw_data(self, ba, start, end):
+    def get_raw_data(self, ba):
         if ba not in config.BA_LIST:
             self.log.warning(f'Balancing Authority {ba} is not supported/does not exist')
             return None
@@ -116,17 +117,15 @@ class EIAScraper:
             fuel.join(load, on='ts')
             data = fuel
 
-        if data is None:
-            return None
-        else:
-            data = data.reset_index()
-            date_range = data['ts'].between(start, end, inclusive=True)
-            data = data[date_range].sort_values(by='ts')
-            data.set_index('ts', inplace=True)
-            return data
+        return data
 
 
-    def get_derived_data(self, data):
+    def get_derived_data(self, data, start, end):
+        data = data.reset_index()
+        date_range = data['ts'].between(start, end, inclusive=True)
+        data = data[date_range].sort_values(by='ts')
+        data.set_index('ts', inplace=True)
+
         fossil_fuels = [fuel for fuel in data.keys() if fuel in config.FOSSIL_FUELS]
         carbon_free = [fuel for fuel in data.keys() if fuel in config.NON_FOSSIL_FUELS]
         renewables = [fuel for fuel in data.keys() if fuel in config.RENEWABLES]
@@ -153,11 +152,42 @@ class EIAScraper:
 
 
     def get_data(self, ba, start, end):
-        raw_data = self.get_raw_data(ba, start, end)
+        if self.is_cached(ba):
+            raw_data = self.uncache(ba)
+        else:
+            raw_data = self.get_raw_data(ba)
+            self.cache(ba, raw_data)
+
         if raw_data is None:
             return None
-        result = self.get_derived_data(raw_data)
+        result = self.get_derived_data(raw_data, start, end)
         return result
+
+
+    def cache(self, ba, data):
+        self.cachelog[ba] = datetime.datetime.now()
+        data.to_pickle(f'cache/{ba}.pkl')
+
+
+    def uncache(self, ba):
+        try:
+            data = pd.read_pickle(f'cache/{ba}.pkl')
+            return data
+        except Exception as e:
+            self.log.info(f'Could not read cache data for {ba}: {e}')
+            return None
+
+    def is_cached(self, ba):
+        if ba not in self.cachelog:
+            self.log.info(f'No data has been cached for {ba}')
+            return False
+        elif (datetime.datetime.now() - self.cachelog[ba]).seconds > 300:
+            self.log.info(f'Cached data for {ba} has expired')
+            return False
+        else:
+            self.log.info(f'Data is cached for {ba}')
+            return True
+
 
 # TODO: Add unittest module & improve testing/cover more test cases
 # start = parse('2020-05-01 00:00:00+00:00')
