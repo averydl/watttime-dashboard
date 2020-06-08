@@ -136,6 +136,8 @@ class EIAScraper:
         # chart 1 information
         if 'load' in columns:
             result['load'] = data['load']
+        else:
+            result['load'] = 0
 
         result['generation'] = data[total].sum(axis=1)
         result['fossil'] = data[fossil_fuels].sum(axis=1)
