@@ -61,6 +61,8 @@ class ChartLines extends Component<IProps, IState> {
                     chartData: pivotJsonTableData(response.data),
                     days: this.props.chartRedux.DayRange,
                     selectedBA: this.props.chartRedux.BA,
+                    startDate: getDateString(this.props.chartRedux.StartDay),
+                    endDate: getDateString(this.props.chartRedux.EndDay),
                 });
                 this.chartHeader = <h1>{this.state.selectedBA + ' emissions'}</h1>;
                 this.forceUpdate();
@@ -76,19 +78,20 @@ class ChartLines extends Component<IProps, IState> {
         this.state.endDate != getDateString(this.props.chartRedux.EndDay) ||
         this.state.selectedBA != this.props.chartRedux.BA){
             const startDate = getDateString(this.props.chartRedux.StartDay);
+            const endDate = getDateString(this.props.chartRedux.EndDay);
             axios.get('/' + this.props.chartRedux.BA 
             + '?start=' 
             + startDate
             + '&end='
-            + this.state.endDate)
+            + endDate)
             .then(response => {
                 this.setState({
                     ...this.state,
                     chartData: pivotJsonTableData(response.data),
                     days: this.props.chartRedux.DayRange,
                     selectedBA: this.props.chartRedux.BA,
-                    startDate: getDateString(this.props.chartRedux.StartDay),
-                    endDate: getDateString(this.props.chartRedux.EndDay),
+                    startDate: startDate,
+                    endDate: endDate,
                 });
                 this.chartHeader = <h1>{this.state.selectedBA + ' emissions'}</h1>;
                 this.forceUpdate();
