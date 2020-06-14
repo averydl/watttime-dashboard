@@ -14,6 +14,22 @@ class FilterWindow extends React.Component {
     }
   }
 
+  balanceAuthList = [
+    'YAD', 'AZPS', 'DEAA', 'AECI', 'AVRN',
+    'AVA', 'BANC', 'BPAT', 'CISO', 'HST',
+    'TPWR', 'TAL', 'DUK', 'FPC', 'CPLE',
+    'CPLW', 'EPE', 'EEI', 'ERCO', 'FMPP',
+    'FPL', 'GVL', 'GLHB', 'GRID', 'GRIF',
+    'ISNE', 'IPCO', 'IID', 'JEA', 'LDWP',
+    'LGEE', 'MISO', 'GWA', 'WWA', 'NEVP',
+    'HGMA', 'NYIS', 'NWMT', 'OVEC', 'PJM',
+    'DOPD', 'PACE', 'PACW', 'PGE', 'AEC',
+    'PSCO', 'PNM', 'CHPD', 'GCPD', 'PSEI',
+    'SRP', 'SCL', 'SEC', 'SCEG', 'SC',
+    'SEPA', 'SOCO', 'SWPP', 'SPA', 'TEC',
+    'TVA', 'TEPC', 'TIDC', 'NSB', 'WALC',
+    'WACM', 'WAUW'].sort();
+
   handleDropDownBalancingAuthority = (e) => {
     this.setState({
       selectedBalancingAuthority: e.target.value,
@@ -35,6 +51,7 @@ class FilterWindow extends React.Component {
   }
 
   render() {
+    const balanceAuthOptions = this.balanceAuthList.map(ba => <option value={ba}>{ba}</option>);
     return (
       /* Navigation Bar */
       <div className='sidebar-navigation'>
@@ -70,72 +87,7 @@ class FilterWindow extends React.Component {
               id='sortByBalancingAuthority'
             >
               <option value='sortByBalancingAuthority'>Balancing Authority</option>
-              <option value='YAD'>YAD</option>
-              <option value='DEAA'>DEAA</option>
-              <option value='AECI'>AECI</option>
-              <option value='AVRN'>AVRN</option>
-              <option value='AVA'>AVA</option>
-              <option value='BANC'>BANC</option>
-              <option value='BPAT'>BPAT</option>
-              <option value='CISO'>CISO</option>
-              <option value='HST'>HST</option>
-              <option value='TPWR'>TPWR</option>
-              <option value='TAL'>TAL</option>
-              <option value='DUK'>DUK</option>
-              <option value='FPC'>FPC</option>
-              <option value='CPLE'>CPLE</option>
-              <option value='CPLW'>CPLW</option>
-              <option value='EPE'>EPE</option>
-              <option value='EEI'>EEI</option>
-              <option value='ERCO'>ERCO</option>
-              <option value='FMPP'>FMPP</option>
-              <option value='FPL'>FPL</option>
-              <option value='GVL'>GVL</option>
-              <option value='GLHB'>GLHB</option>
-              <option value='GRID'>GRID</option>
-              <option value='GRIF'>GRIF</option>
-              <option value='ISNE'>ISNE</option>
-              <option value='IPCO'>IPCO</option>
-              <option value='IID'>IID</option>
-              <option value='JEA'>JEA</option>
-              <option value='LDWP'>LDWP</option>
-              <option value='LGEE'>LGEE</option>
-              <option value='MISO'>MISO</option>
-              <option value='GWA'>GWA</option>
-              <option value='WWA'>WWA</option>
-              <option value='NEVP'>NEVP</option>
-              <option value='HGMA'>HGMA</option>
-              <option value='NYIS'>NYIS</option>
-              <option value='NWMT'>NWMT</option>
-              <option value='OVEC'>OVEC</option>
-              <option value='PJM'>PJM</option>
-              <option value='DOPD'>DOPD</option>
-              <option value='PACE'>PACE</option>
-              <option value='PACW'>PACW</option>
-              <option value='PGE'>PGE</option>
-              <option value='AEC'>AEC</option>
-              <option value='PSCO'>PSCO</option>
-              <option value='PNM'>PNM</option>
-              <option value='CHPD'>CHPD</option>
-              <option value='GCPD'>GCPD</option>
-              <option value='PSEI'>PSEI</option>
-              <option value='SRP'>SRP</option>
-              <option value='SCL'>SCL</option>
-              <option value='SEC'>SEC</option>
-              <option value='SCEG'>SCEG</option>
-              <option value='SC'>SC</option>
-              <option value='SEPA'>SEPA</option>
-              <option value='SOCO'>SOCO</option>
-              <option value='SWPP'>SWPP</option>
-              <option value='SPA'>SPA</option>
-              <option value='TEC'>TEC</option>
-              <option value='TVA'>TVA</option>
-              <option value='TEPC'>TEPC</option>
-              <option value='TIDC'>TIDC</option>
-              <option value='NSB'>NSB</option>
-              <option value='WALC'>WALC</option>
-              <option value='WACM'>WACM</option>
-              <option value='WAUW'>WAUW</option>
+              {balanceAuthOptions}
             </select>
           </div>
 
