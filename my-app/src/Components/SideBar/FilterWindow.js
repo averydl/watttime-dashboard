@@ -1,7 +1,7 @@
 import React from 'react'
 import Calendar from 'react-calendar';
 import { connect } from 'react-redux';
-import { chooseBA, chooseDays, chooseEndDay } from '../../actions/filterMenu';
+import { chooseBA, chooseStartDay, chooseEndDay } from '../../actions/filterMenu';
 import 'react-calendar/dist/Calendar.css';
 
 class FilterWindow extends React.Component {
@@ -30,7 +30,7 @@ class FilterWindow extends React.Component {
     e.preventDefault();
     console.log(this.state);
     this.props.chooseBA(this.state.selectedBalancingAuthority);
-    this.props.chooseDays(this.state.startDate);
+    this.props.chooseStartDay(this.state.startDate);
     this.props.chooseEndDay(this.state.endDate);
   }
 
@@ -161,4 +161,4 @@ function mapStateToProps(reduxState){
 
 
 // export default FilterWindow
-export default connect(mapStateToProps, {chooseBA, chooseDays, chooseEndDay})(FilterWindow)
+export default connect(mapStateToProps, {chooseBA, chooseStartDay, chooseEndDay})(FilterWindow)

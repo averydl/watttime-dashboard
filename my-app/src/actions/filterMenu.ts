@@ -1,5 +1,5 @@
 export const BALANCE_AUTH = "BALANCE_AUTH";
-export const DAYS = "DAYS";
+export const START_DAY = "START_DAY";
 export const END_DAY = "END_DAY";
 
 export function chooseBA(balanceAuthority: any) {
@@ -9,9 +9,9 @@ export function chooseBA(balanceAuthority: any) {
   }
 }
 
-export function chooseDays(day: any) {
+export function chooseStartDay(day: any) {
   return {
-    type: DAYS,
+    type: START_DAY,
     day
   }
 }

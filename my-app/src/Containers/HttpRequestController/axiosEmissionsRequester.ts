@@ -10,12 +10,6 @@ export function requestEmissions(ba: string, start: string, end: string): Promis
   + start
   + '&end=' 
   + end );
-  // .then(response => {
-  //     this.setState({chartData: pivotJsonTableData(response.data)});
-  // })
-  // .catch(error => {
-  //     console.log('ERROR:\n' + error);
-  // });
 }
 
 export default instance;

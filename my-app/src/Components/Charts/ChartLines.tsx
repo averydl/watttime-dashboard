@@ -18,13 +18,9 @@ interface IProps {
 
 interface IState {
     chartData?: undefined;
-    today?: any;
     startDate?: any;
     endDate?: any;
     selectedBA?: any;
-    days?: any;
-    shouldUpdate?: boolean;
-    fetchComplete?: boolean;
 }
 
 class ChartLines extends Component<IProps, IState> {
@@ -35,12 +31,9 @@ class ChartLines extends Component<IProps, IState> {
         this.today = getDateString(this.todayDate);
         this.state = {
             chartData: undefined,
-            today: this.today,
             startDate: getDateString(this.props.chartRedux.StartDay),
             endDate: getDateString(this.props.chartRedux.EndDay),
             selectedBA: this.props.chartRedux.BA,
-            days: this.props.chartRedux.DayRange,
-            shouldUpdate: true,
         };
     }
 
@@ -59,7 +52,6 @@ class ChartLines extends Component<IProps, IState> {
                 this.setState({
                     ...this.state,
                     chartData: pivotJsonTableData(response.data),
-                    days: this.props.chartRedux.DayRange,
                     selectedBA: this.props.chartRedux.BA,
                     startDate: getDateString(this.props.chartRedux.StartDay),
                     endDate: getDateString(this.props.chartRedux.EndDay),
@@ -88,7 +80,6 @@ class ChartLines extends Component<IProps, IState> {
                 this.setState({
                     ...this.state,
                     chartData: pivotJsonTableData(response.data),
-                    days: this.props.chartRedux.DayRange,
                     selectedBA: this.props.chartRedux.BA,
                     startDate: startDate,
                     endDate: endDate,

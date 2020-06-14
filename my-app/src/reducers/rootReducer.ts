@@ -1,4 +1,4 @@
-import { BALANCE_AUTH, DAYS, chooseDays, END_DAY } from '../../src/actions/filterMenu';
+import { BALANCE_AUTH, START_DAY, chooseStartDay, END_DAY } from '../../src/actions/filterMenu';
 
 
 const initialState: any = {
@@ -14,7 +14,7 @@ export function rootReducer(state: any = initialState, action: any) {
       console.log("balance auth chosen : " + action.balanceAuthority);
       var newState = { ...state, BA: action.balanceAuthority};
       return newState;
-    case DAYS:
+    case START_DAY:
       console.log("start day : " + action.day);
       var newState = {...state, StartDay: action.day};
       return newState;

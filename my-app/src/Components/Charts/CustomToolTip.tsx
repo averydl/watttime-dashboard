@@ -13,7 +13,10 @@ const CustomToolTip = (props: any) => {
     const { payload, label } = props;
     const dataPoint: any = payload[0].payload;
 
-    if(dataPoint && dataPoint.change_fossil && dataPoint.change_carbon_free && dataPoint.change_renewables){
+    if(dataPoint 
+      && dataPoint.change_fossil != undefined 
+      && dataPoint.change_carbon_free != undefined
+      && dataPoint.change_renewables != undefined){
       const barData: any = [
         {
           "name": "Percent Change",
