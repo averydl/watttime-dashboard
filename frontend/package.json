@@ -50,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "@angular/core": "^9.1.9",
+    "@angular/core": "^10.2.5",
     "@angular/platform-browser": "^9.1.9",
     "@angular/platform-browser-dynamic": "^9.1.9",
     "@syncfusion/ej2-angular-navigations": "^18.1.55"
